@@ -5,8 +5,16 @@ using UnityEngine;
 public class Game_Piece_Spawner : MonoBehaviour{
     
     #region Public Variables
+
     [Tooltip("This is the the piece that you plan to spawn")]
     public GameObject GamePieceToSpawn;
+
+    [Tooltip("The Max amount of pieces that a player can use")]
+    public int MaxPieces = 50;
+
+    public NekoTheWolfCabinet Cabinet;
+
+
     #endregion
 
     #region Private Variables
@@ -20,12 +28,18 @@ public class Game_Piece_Spawner : MonoBehaviour{
     //This prevents the spawner from spawnning if it is ready to spawn
     private bool ActiveCanSpawn = true;
 
+    //
+    private int AmountOfPiecesLeft;
+
     #endregion
 
     // Start is called before the first frame update
     void Start(){
         //Sets Delay Timer to the Amount of time specified
         DelayTimer = DelayAmountOfTime;
+
+        //The amount of balls left
+        AmountOfPiecesLeft = MaxPieces;
     }
 
     // Update is called once per frame
@@ -40,6 +54,7 @@ public class Game_Piece_Spawner : MonoBehaviour{
     }
 
     #region Spawning Functions
+
     //This function will spawn a game piece.
     //A very simple function, not much happening here.
     private void SpawnGamePiece(){
@@ -47,13 +62,18 @@ public class Game_Piece_Spawner : MonoBehaviour{
         Quaternion SpawnRotation = new Quaternion(0, 0, 0, 0);
 
         //If you can spawn a piece
-        if(ActiveCanSpawn){
+        if(ActiveCanSpawn && AmountOfPiecesLeft > 0){
             //Then spawn the piece
             Object.Instantiate(GamePieceToSpawn, transform.position, SpawnRotation);
             //Active will be set to false, so you can no longer spawn until it is reactived
             ActiveCanSpawn = false;
+            //Decrements the amount of pieces
+            AmountOfPiecesLeft--;
+            //Updates the Text
+            Cabinet.UpdateText();
         }
     }
+
     #endregion
 
     #region Timer Functions
@@ -75,6 +95,14 @@ public class Game_Piece_Spawner : MonoBehaviour{
 
     }
 
+    #endregion
+
+    #region Public Functions
+
+    //Returns the amount of pieces left
+    public int GetAmountLeft(){
+        return AmountOfPiecesLeft;
+    }
 
     #endregion
 

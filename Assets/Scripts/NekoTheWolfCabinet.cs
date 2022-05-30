@@ -14,15 +14,20 @@ public class NekoTheWolfCabinet : MonoBehaviour{
 
     //Holds the triggers for the games
     public GameObject[] ScoreTriggers;
+
+    public Game_Piece_Spawner PieceSpawner;
     #endregion
 
     #region Private Variables
+
+
+
     #endregion
 
     // Start is called before the first frame update
     private void Start() {
         //Updates the Score Display
-        ScoreDisplay.text = "Score\n" + Score.ToString();
+        ScoreDisplay.text = "Score\n" + Score.ToString() + "\nBalls Left\n" + PieceSpawner.GetAmountLeft();
     }
 
     #region Score Triggers
@@ -40,8 +45,14 @@ public class NekoTheWolfCabinet : MonoBehaviour{
         //Adds score to the score
         Score += AmountToAdd;
 
+        //Updates the Text
+        UpdateText();
+    }
+
+    //Updates the text
+    public void UpdateText(){
         //Updates the Score Display
-        ScoreDisplay.text = "Score\n" + Score.ToString();
+        ScoreDisplay.text = "Score\n" + Score.ToString() + "\nBalls Left\n" + PieceSpawner.GetAmountLeft();
     }
 
     #endregion

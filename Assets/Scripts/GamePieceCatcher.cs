@@ -12,7 +12,6 @@ public class GamePieceCatcher : MonoBehaviour{
     #endregion
 
     private void OnTriggerEnter(Collider other) {
-        Debug.Log("AHHHH HELP SOMETHING IS ENTERING ME");
         //If the game object is a game piece, add score
         if(other.gameObject.CompareTag("Game Piece")){
             ArcadeCabinet.AddScore(10);
