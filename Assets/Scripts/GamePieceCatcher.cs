@@ -15,7 +15,7 @@ public class GamePieceCatcher : MonoBehaviour{
         //If the game object is a game piece, add score
         if(other.gameObject.CompareTag("Game Piece")){
             ArcadeCabinet.AddScore(10);
-            DestroyObject(other.gameObject);
+            Destroy(other.gameObject);
         }
     }
 }

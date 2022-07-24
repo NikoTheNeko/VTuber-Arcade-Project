@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Game_Piece_Spawner : MonoBehaviour{
     
@@ -9,11 +10,13 @@ public class Game_Piece_Spawner : MonoBehaviour{
     [Tooltip("This is the the piece that you plan to spawn")]
     public GameObject GamePieceToSpawn;
 
+    [Tooltip("This is the the piece that you plan to spawn for chat interaction")]
+    public GameObject GamePieceToSpawnTwitch;
+
     [Tooltip("The Max amount of pieces that a player can use")]
     public int MaxPieces = 50;
 
     public NekoTheWolfCabinet Cabinet;
-
 
     #endregion
 
@@ -31,6 +34,11 @@ public class Game_Piece_Spawner : MonoBehaviour{
     //
     private int AmountOfPiecesLeft;
 
+    private TwitchIRC IRC;
+
+    public Chatter latestChatter;
+
+
     #endregion
 
     // Start is called before the first frame update
@@ -40,6 +48,14 @@ public class Game_Piece_Spawner : MonoBehaviour{
 
         //The amount of balls left
         AmountOfPiecesLeft = MaxPieces;
+
+        // This is done just for the sake of simplicity,
+        // In your own script, you should instead have a direct reference 
+        // to the TwitchIRC component (inspector)
+        IRC = GameObject.Find("TwitchIRC").GetComponent<TwitchIRC>();
+
+        // Add an event listener for new chat messages
+        IRC.newChatMessageEvent.AddListener(SpawnGamePieceTwitch);
     }
 
     // Update is called once per frame
@@ -72,6 +88,21 @@ public class Game_Piece_Spawner : MonoBehaviour{
             //Updates the Text
             Cabinet.UpdateText();
         }
+    }
+
+    public void SpawnGamePieceTwitch(Chatter chatter){
+        //Creates a Quaternion to spawn
+        Quaternion SpawnRotation = new Quaternion(0, 0, 0, 0);
+
+        Debug.Log("New chatter object received! Chatter name: " + chatter.tags.displayName);
+
+        //Then spawn the piece
+        GameObject TwitchPiece = Object.Instantiate(GamePieceToSpawnTwitch, transform.position, SpawnRotation);
+        Debug.Log(TwitchPiece.GetComponent<Text>());
+        Debug.Log(chatter.tags.displayName);
+        TwitchPiece.GetComponent<TwitchObject>().UsernameText.text = chatter.tags.displayName;
+
+        Cabinet.UpdateText();
     }
 
     #endregion
